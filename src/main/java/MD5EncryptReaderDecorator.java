@@ -2,78 +2,73 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class MD5EncryptReaderDecorator implements IFileReader {
+
     private IFileReader reader;
 
-    public MD5EncryptReaderDecorator(IFileReader reader){
+    public MD5EncryptReaderDecorator(IFileReader reader) {
         logDependencyAdding(reader, "constructor");
         this.reader = reader;
     }
 
-    public void setRider(IFileReader reader){
-        logDependencyAdding(reader, "setRider");
+    public void setReader(IFileReader reader) {
+        logDependencyAdding(reader, "setReader");
         this.reader = reader;
     }
 
+    @Override
     public boolean open(String fileName) throws IOException {
-        // TODO Possibly: with reader usage
-        boolean isOk = true;
-        if (reader != null){
-            isOk = reader.open(fileName);
+        //TODO Possibly: with reader usage
+        boolean isFileExist = true;
+        if(reader != null) {
+            isFileExist = reader.open(fileName);
         }
 
-        // TODO: Open file (in a default way)
-        System.out.println("+MD5EncryptReaderDecorator open with parameter: " + fileName);
-        System.out.println("MD5EncryptReaderDecorator::open::Just trying to open md5 file: " + fileName);
-        return isOk && isValidFileType() && !isPasswordNecessary();
+        System.out.println("+MD5EncryptReaderDecorator.open with parameter: " + fileName);
+        //TODO: Open file (in a default way)
+        System.out.println("MD5EncryptReaderDecorator::open::Trying to open MD5 file: " + fileName);
+        return isFileExist && isValidFileType(fileName) && !isPasswordRequired(fileName);
     }
 
+    @Override
     public ByteArrayOutputStream read() throws IOException {
-        // TODO: Implement additional behaviour using reader
+        //TODO: Implement additional behavior using reader
         ByteArrayOutputStream readerStream = null;
-        if (reader != null){
+        if(reader != null) {
             readerStream = reader.read();
-        }
-        else {
+        } else {
             readerStream = new ByteArrayOutputStream();
         }
 
-        System.out.println("+MD5EncryptReaderDecorator read without parameters");
-
-        // TODO: Read file (in a default way)
-        System.out.println("MD5EncryptReaderDecorator::read::Just trying to read md5 file");
-
+        System.out.println("+MD5EncryptReaderDecorator.read without parameters");
+        //TODO: Read file (in a default way)
+        System.out.println("MD5EncryptReaderDecorator::read::Reading MD5 file");
         return encrypt(readerStream);
     }
 
-    private void logDependencyAdding(IFileReader reader, String methodToLog){
-        String msg = "+MD5EncryptReaderDecorator " + methodToLog + " with parameter IFileReader: ";
-        if (reader != null) {
-            msg += reader.toString();
-        }
-        else {
+    private void logDependencyAdding(IFileReader reader, String methodName) {
+        String msg = "+MD5EncryptReaderDecorator " + methodName + " with parameter IFileReader: ";
+
+        if(reader != null) {
+            msg += reader;
+        } else {
             msg += "null";
         }
+
         System.out.println(msg);
     }
 
-    private boolean isValidFileType(){
-        // Note: Is this file type valid
-
-        System.out.println("-MD5EncryptReaderDecorator isValidFileType");
+    private boolean isValidFileType(String fileName) {
+        System.out.println("-MD5EncryptReaderDecorator.isValidFileType with parameter: " + fileName);
         return true;
     }
 
-    private boolean isPasswordNecessary(){
-        // Note: Is this file need password
-
-        System.out.println("-MD5EncryptReaderDecorator isPasswordNecessary");
+    private boolean isPasswordRequired(String fileName) {
+        System.out.println("-MD5EncryptReaderDecorator.isPasswordRequired with parameter: " + fileName);
         return false;
     }
 
-    private ByteArrayOutputStream encrypt(ByteArrayOutputStream stream){
-        System.out.println("-MD5EncryptReaderDecorator encrypt with parameter: " + stream.toString());
-
+    private ByteArrayOutputStream encrypt(ByteArrayOutputStream stream) {
+        System.out.println("-MD5EncryptReaderDecorator.encrypt with parameter having a hashcode: " + stream.hashCode());
         return stream;
     }
-
 }

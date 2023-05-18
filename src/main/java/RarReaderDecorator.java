@@ -1,11 +1,11 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class ZipReaderDecorator implements IFileReader {
+public class RarReaderDecorator implements IFileReader {
 
     private IFileReader reader;
 
-    public ZipReaderDecorator(IFileReader reader) {
+    public RarReaderDecorator(IFileReader reader) {
         logDependencyAdding(reader, "constructor");
         this.reader = reader;
     }
@@ -23,9 +23,9 @@ public class ZipReaderDecorator implements IFileReader {
             isFileExist = reader.open(fileName);
         }
 
-        System.out.println("+ZipReaderDecorator.open with parameter: " + fileName);
+        System.out.println("+RarReaderDecorator.open with parameter: " + fileName);
         //TODO: Open file (in a default way)
-        System.out.println("ZipReaderDecorator::open::Trying to open ZIP file: " + fileName);
+        System.out.println("RarReaderDecorator::open::Trying to open RAR file: " + fileName);
         return isFileExist && isValidFileType(fileName) && !isPasswordRequired(fileName);
     }
 
@@ -39,14 +39,14 @@ public class ZipReaderDecorator implements IFileReader {
             readerStream = new ByteArrayOutputStream();
         }
 
-        System.out.println("+ZipReaderDecorator.read without parameters");
+        System.out.println("+RarReaderDecorator.read without parameters");
         //TODO: Read file (in a default way)
-        System.out.println("ZipReaderDecorator::read::Reading ZIP file");
-        return unZip(readerStream);
+        System.out.println("RarReaderDecorator::read::Reading RAR file");
+        return unRar(readerStream);
     }
 
     private void logDependencyAdding(IFileReader reader, String methodName) {
-        String msg = "+ZipReaderDecorator " + methodName + " with parameter IFileReader: ";
+        String msg = "+RarReaderDecorator " + methodName + " with parameter IFileReader: ";
 
         if(reader != null) {
             msg += reader;
@@ -58,17 +58,17 @@ public class ZipReaderDecorator implements IFileReader {
     }
 
     private boolean isValidFileType(String fileName) {
-        System.out.println("-ZipReaderDecorator.isValidFileType with parameter: " + fileName);
+        System.out.println("-RarReaderDecorator.isValidFileType with parameter: " + fileName);
         return true;
     }
 
     private boolean isPasswordRequired(String fileName) {
-        System.out.println("-ZipReaderDecorator.isPasswordRequired with parameter: " + fileName);
+        System.out.println("-RarReaderDecorator.isPasswordRequired with parameter: " + fileName);
         return false;
     }
 
-    private ByteArrayOutputStream unZip(ByteArrayOutputStream stream) {
-        System.out.println("-ZipReaderDecorator.unZip with parameter having a hashcode: " + stream.hashCode());
+    private ByteArrayOutputStream unRar(ByteArrayOutputStream stream) {
+        System.out.println("-RarReaderDecorator.unRar with parameter having a hashcode: " + stream.hashCode());
         return stream;
     }
 }

@@ -1,11 +1,10 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class ZipReaderDecorator implements IFileReader {
-
+public class RSAEncryptReaderDecorator implements IFileReader {
     private IFileReader reader;
 
-    public ZipReaderDecorator(IFileReader reader) {
+    public RSAEncryptReaderDecorator(IFileReader reader) {
         logDependencyAdding(reader, "constructor");
         this.reader = reader;
     }
@@ -23,30 +22,30 @@ public class ZipReaderDecorator implements IFileReader {
             isFileExist = reader.open(fileName);
         }
 
-        System.out.println("+ZipReaderDecorator.open with parameter: " + fileName);
+        System.out.println("+RSAEncryptReaderDecorator.open with parameter: " + fileName);
         //TODO: Open file (in a default way)
-        System.out.println("ZipReaderDecorator::open::Trying to open ZIP file: " + fileName);
+        System.out.println("RSAEncryptReaderDecorator::open::Trying to open RSA file: " + fileName);
         return isFileExist && isValidFileType(fileName) && !isPasswordRequired(fileName);
     }
 
     @Override
     public ByteArrayOutputStream read() throws IOException {
         //TODO: Implement additional behavior using reader
-        ByteArrayOutputStream readerStream;
+        ByteArrayOutputStream readerStream = null;
         if(reader != null) {
             readerStream = reader.read();
         } else {
             readerStream = new ByteArrayOutputStream();
         }
 
-        System.out.println("+ZipReaderDecorator.read without parameters");
+        System.out.println("+RSAEncryptReaderDecorator.read without parameters");
         //TODO: Read file (in a default way)
-        System.out.println("ZipReaderDecorator::read::Reading ZIP file");
-        return unZip(readerStream);
+        System.out.println("RSAEncryptReaderDecorator::read::Reading RSA file");
+        return encrypt(readerStream);
     }
 
     private void logDependencyAdding(IFileReader reader, String methodName) {
-        String msg = "+ZipReaderDecorator " + methodName + " with parameter IFileReader: ";
+        String msg = "+RSAEncryptReaderDecorator " + methodName + " with parameter IFileReader: ";
 
         if(reader != null) {
             msg += reader;
@@ -58,17 +57,17 @@ public class ZipReaderDecorator implements IFileReader {
     }
 
     private boolean isValidFileType(String fileName) {
-        System.out.println("-ZipReaderDecorator.isValidFileType with parameter: " + fileName);
+        System.out.println("-RSAEncryptReaderDecorator.isValidFileType with parameter: " + fileName);
         return true;
     }
 
     private boolean isPasswordRequired(String fileName) {
-        System.out.println("-ZipReaderDecorator.isPasswordRequired with parameter: " + fileName);
+        System.out.println("-RSAEncryptReaderDecorator.isPasswordRequired with parameter: " + fileName);
         return false;
     }
 
-    private ByteArrayOutputStream unZip(ByteArrayOutputStream stream) {
-        System.out.println("-ZipReaderDecorator.unZip with parameter having a hashcode: " + stream.hashCode());
+    private ByteArrayOutputStream encrypt(ByteArrayOutputStream stream) {
+        System.out.println("-RSAEncryptReaderDecorator.encrypt with parameter having a hashcode: " + stream.hashCode());
         return stream;
     }
 }

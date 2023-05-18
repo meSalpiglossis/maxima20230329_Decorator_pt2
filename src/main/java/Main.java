@@ -1,88 +1,79 @@
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 
-        // TXT read
+        final String DIVIDER = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+
+        //READ txt
         try {
             IFileReader additionalReaderFeature = null;
-            IFileReader simpleTXTReader = new FileReaderDecorator(additionalReaderFeature);
-            simpleTXTReader.open("ToRead.txt");
-            ByteArrayOutputStream readerStream = simpleTXTReader.read();
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("SimpleTxt.txt");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
 
-        // Zip Arch Txt read
+        System.out.println(DIVIDER);
+
+        //READ txt AFTER unzip
         try {
             IFileReader additionalReaderFeature = new ZipReaderDecorator(null);
-            IFileReader unZipTxtReader = new FileReaderDecorator(additionalReaderFeature);
-            unZipTxtReader.open("ZipToRead.txt");
-            ByteArrayOutputStream readerStream = unZipTxtReader.read();
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("Txt.zip");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
 
-        // MD5 Crypt Txt read
+        System.out.println(DIVIDER);
+
+        //READ txt AFTER md5encrypt
         try {
             IFileReader additionalReaderFeature = new MD5EncryptReaderDecorator(null);
-            IFileReader md5CryptoTxtReader = new FileReaderDecorator(additionalReaderFeature);
-            md5CryptoTxtReader.open("MD5ECryptToRead.txt");
-            ByteArrayOutputStream readerStream = md5CryptoTxtReader.read();
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("Txt.md5");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
 
-        //  MD5 Crypt Zip Arch Txt read
+        System.out.println(DIVIDER);
+
+        //READ txt AFTER unzip AFTER md5_encrypt
         try {
             IFileReader additionalReaderFeature = new ZipReaderDecorator(new MD5EncryptReaderDecorator(null));
-            IFileReader md5CryptoZipTxtReader = new FileReaderDecorator(additionalReaderFeature);
-            md5CryptoZipTxtReader.open("MD5ECryptZipToRead.txt");
-            ByteArrayOutputStream readerStream = md5CryptoZipTxtReader.read();
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("Txt.zip.md5");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
 
-        //  MD5 Crypt Zip MD5 Crypt Arch Txt read
+        System.out.println(DIVIDER);
+
+        //READ txt AFTER md5_encrypt AFTER unzip AFTER rsa_encrypt
         try {
-            IFileReader additionalReaderFeature = new MD5EncryptReaderDecorator(new ZipReaderDecorator(new MD5EncryptReaderDecorator(null)));
-            IFileReader md5CryptoZipMD5TxtReader = new FileReaderDecorator(additionalReaderFeature);
-            md5CryptoZipMD5TxtReader.open("MD5ECryptZipMD5ECryptToRead.txt");
-            ByteArrayOutputStream readerStream = md5CryptoZipMD5TxtReader.read();
+            IFileReader additionalReaderFeature = new MD5EncryptReaderDecorator(new ZipReaderDecorator(new RSAEncryptReaderDecorator(null)));
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("Txt.md5.zip.rsa");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
 
-        //  MD5 Crypt Zip-Zip-Zip-Zip-Zip Arch Txt read
+        System.out.println(DIVIDER);
+
+        //READ txt AFTER md5_encrypt AFTER unzip AFTER unrar
         try {
-            IFileReader additionalReaderFeature = new ZipReaderDecorator(new ZipReaderDecorator(new ZipReaderDecorator(new ZipReaderDecorator(new ZipReaderDecorator(null)))));
-            IFileReader unZip5TimesTxtReader = new FileReaderDecorator(additionalReaderFeature);
-            unZip5TimesTxtReader.open("ZipZipZipZipZipToRead.txt");
-            ByteArrayOutputStream readerStream = unZip5TimesTxtReader.read();
+            IFileReader additionalReaderFeature = new MD5EncryptReaderDecorator(new ZipReaderDecorator(new RarReaderDecorator(null)));
+            IFileReader reader = new FileReaderDecorator(additionalReaderFeature);
+            reader.open("Txt.md5.zip.rar");
+            ByteArrayOutputStream readerStream = reader.read();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch(Exception ex){
-            System.out.println(ex);
-        }
-        System.out.println();
-
-        // HomeWork:
-        // 1) Read source code and read console logging
-        // 2) Possibly debug source code
-        // 3) Add new Decorator: Rar Arch support
-        // 4) Add new Decorator: RSA Encrypt support
-        // 5) Add Builder to configure Decorators
-        // 6*) Extract abstract class for all decorators
-        // 7*) Cover decorators with Unit Tests
     }
 }
-
